@@ -6,55 +6,56 @@ conflation.1 = {
 
 	trigger = {
 		any_country_culture = {
-				has_country_culture_modifier = administrators_cultmodifier
-				NOR = {
-					has_pop_type_right = citizen
-					has_pop_type_right = nobles
-				}
-				NOT = { has_country_culture_modifier = culture_conflated_recently }
+			has_country_culture_modifier = administrators_cultmodifier
+			NOR = {
+				has_pop_type_right = citizen
+				has_pop_type_right = nobles
+			}
+			NOT = { has_country_culture_modifier = culture_conflated_recently }
 		}
 	}
 	
 	immediate = {
-		if = {
+		every_country_culture = {
 			limit = {
-				any_country_culture = { has_country_culture_modifier = promoted_administrators_in_subcultures }
+				has_country_culture_modifier = promoted_administrators_in_subcultures
 			}
-			random_country_culture = {
-				limit = { has_country_culture_modifier = promoted_administrators_in_subcultures }
-				save_scope_as = overculture
-			}
-		}
-		random_country_culture = {
-			limit = {
-				has_country_culture_modifier = administrators_cultmodifier
-				this.culture.culture_group = scope:overculture.culture.culture_group
-				NOR = {
-					has_pop_type_right = citizen
-					has_pop_type_right = nobles
+			save_scope_as = overculture
+			root = {
+				every_country_culture = {
+					limit = {
+						this.culture.culture_group = scope:overculture.culture.culture_group
+						NOR = {
+							has_pop_type_right = citizen
+							has_pop_type_right = nobles
+						}
+						NOT = { has_country_culture_modifier = culture_conflated_recently }
+					}
+					save_scope_as = underculture
+					root = {
+						every_owned_province = {
+							limit = {
+								any_pops_in_province = { pop_culture = scope:underculture.culture }
+							}
+							random_pops_in_province = {
+								limit = { pop_culture = scope:underculture.culture }
+								set_pop_culture = scope:overculture.culture
+							}
+						}
+					}
+					add_country_culture_modifier = {
+						name = "culture_conflated_recently"
+						duration = 7300
+					}
+					if = {
+						limit = { NOT = { has_country_culture_modifier = administrators_cultmodifier } }
+						add_country_culture_modifier = {
+							name = administrators_cultmodifier
+							duration = -1
+						}
+					}
 				}
-				NOT = { has_country_culture_modifier = culture_conflated_recently }
 			}
-			save_scope_as = underculture
-		}
-		every_owned_province = {
-			limit = {
-				any_pops_in_province = { pop_culture = scope:underculture.culture }
-			}
-			random_pops_in_province = {
-				limit = { pop_culture = scope:underculture.culture }
-				set_pop_culture = scope:overculture.culture
-			}
-		}
-		scope:underculture = {
-			add_country_culture_modifier = {
-				name = "culture_conflated_recently"
-				duration = 7300
-			}
-		}
-		trigger_event = {
-			id = conflation.1
-			days = 1
 		}
 	}
 }
