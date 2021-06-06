@@ -45,7 +45,7 @@ conflation.1 = {
 					}
 					add_country_culture_modifier = {
 						name = "culture_conflated_recently"
-						duration = 7300
+						duration = 7250
 					}
 					if = {
 						limit = { NOT = { has_country_culture_modifier = administrators_cultmodifier } }
