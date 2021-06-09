@@ -59,7 +59,7 @@
 				factor = 0
 				scope:target_culture = { #There must be more pops from other cultures in this group than this culture has for AI to do it.
 					country_culture_pop_count >= num_of_pops_in_country_cultures_in_same_group_svalue
-					num_of_pops_in_country_cultures_in_same_group_svalue > 900 #Never do it unless you have at least this many pops in that culture group.
+					num_of_pops_in_country_cultures_in_same_group_svalue < 300 #Never do it unless you have at least this many pops in that culture group.
 				}
 			}
 		}
